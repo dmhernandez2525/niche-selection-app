@@ -1,4 +1,3 @@
-// keywordResearch.js
 const googleTrends = require('google-trends-api');
 
 module.exports = {
@@ -11,6 +10,10 @@ module.exports = {
         },
         function (err, results) {
           if (err) {
+            console.error(
+              'An error occurred while getting trending keywords',
+              err
+            );
             reject(err);
           } else {
             const data = JSON.parse(results);
