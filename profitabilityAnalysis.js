@@ -1,5 +1,6 @@
 const { google } = require('googleapis');
 const adsense = google.adsense('v1.4');
+require('dotenv').config();
 
 module.exports = {
   analyzeProfitability: async function (keyword) {

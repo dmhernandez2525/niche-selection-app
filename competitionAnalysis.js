@@ -1,5 +1,6 @@
 const { google } = require('googleapis');
 const youtube = google.youtube('v3');
+require('dotenv').config();
 
 module.exports = {
   analyzeCompetition: async function (keyword) {
