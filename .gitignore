@@ -1,3 +1,11 @@
-/node_modules
+node_modules
+.DS_Store
+dist
 .env
-working-info.md
+.idea
+.vscode
+coverage
+build
+.next
+out
+.vercel
