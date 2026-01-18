@@ -1,0 +1,56 @@
+# Render.com Infrastructure as Code
+# Deploy with: render.com dashboard > New > Blueprint > Connect this repo
+
+services:
+  # Frontend - Vite Static Site
+  - type: web
+    name: niche-selection-client
+    runtime: static
+    buildCommand: cd client && npm install && npm run build
+    staticPublishPath: client/dist
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          name: niche-selection-server
+          type: web
+          property: hostport
+
+  # Backend - Express API
+  - type: web
+    name: niche-selection-server
+    runtime: node
+    plan: free
+    buildCommand: cd server && npm install
+    startCommand: cd server && npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3500
+      - key: DATABASE_URL
+        fromDatabase:
+          name: niche-selection-db
+          property: connectionString
+      - key: YOUTUBE_API_KEY
+        sync: false  # Set manually in Render dashboard
+      - key: CORS_ORIGIN
+        fromService:
+          name: niche-selection-client
+          type: web
+          property: host
+
+# Database
+databases:
+  - name: niche-selection-db
+    plan: free  # Note: Free tier expires after 30 days
+    databaseName: niche_selection
+    user: niche_user
