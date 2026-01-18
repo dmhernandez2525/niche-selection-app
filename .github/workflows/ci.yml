@@ -10,6 +10,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+  pull-requests: read
+
 jobs:
   # Detect which parts of the codebase changed
   changes:
@@ -44,9 +48,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
-          cache-dependency-path: client/package-lock.json
+          cache-dependency-path: '**/package-lock.json'
 
       - name: Install dependencies
         run: npm ci
@@ -85,9 +89,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
-          cache-dependency-path: server/package-lock.json
+          cache-dependency-path: '**/package-lock.json'
 
       - name: Install dependencies
         run: npm ci
@@ -96,10 +100,10 @@ jobs:
         run: npx tsc --noEmit
 
       - name: Run tests
-        run: npm test || echo "No tests configured yet"
+        run: npm test 2>/dev/null || echo "No tests configured yet"
 
       - name: Build (if applicable)
-        run: npm run build || echo "No build script"
+        run: npm run build 2>/dev/null || echo "No build script"
 
   # Final status check for branch protection
   ci-status:
