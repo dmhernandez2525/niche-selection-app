@@ -19,5 +19,39 @@ export default defineConfig([
       ecmaVersion: 2020,
       globals: globals.browser,
     },
+    rules: {
+      // Allow exports like buttonVariants alongside components (common in shadcn/ui)
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true },
+      ],
+    },
+  },
+  // Test files configuration
+  {
+    files: ['**/*.test.{ts,tsx}', '**/test/**/*.{ts,tsx}'],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        // Vitest globals
+        describe: 'readonly',
+        it: 'readonly',
+        expect: 'readonly',
+        beforeEach: 'readonly',
+        afterEach: 'readonly',
+        beforeAll: 'readonly',
+        afterAll: 'readonly',
+        vi: 'readonly',
+      },
+    },
+    rules: {
+      // Disable react-refresh for test files
+      'react-refresh/only-export-components': 'off',
+      // Allow unused vars prefixed with underscore in tests
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
+    },
   },
 ])
