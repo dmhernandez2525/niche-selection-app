@@ -1,23 +1,16 @@
 {
-  "name": "niche-selection-app",
+  "name": "niche-selection-app-monorepo",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js",
-    "start-dev": "nodemon app.js"
+    "dev:server": "npm run dev --workspace=server",
+    "dev:client": "npm run dev --workspace=client"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "dotenv": "^16.0.3",
-    "express": "^4.18.2",
-    "google-trends-api": "^4.9.2",
-    "googleapis": "^118.0.0"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.22"
-  }
+  "license": "ISC"
 }
