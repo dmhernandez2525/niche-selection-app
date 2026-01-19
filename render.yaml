@@ -27,8 +27,8 @@ services:
     name: niche-selection-server
     runtime: node
     plan: free
-    buildCommand: cd server && npm ci && npx prisma generate && npx prisma migrate deploy
-    startCommand: cd server && npm start
+    buildCommand: cd server && npm ci && npx prisma generate
+    startCommand: cd server && npx prisma migrate deploy && npm start
     healthCheckPath: /health
     envVars:
       - key: NODE_ENV
