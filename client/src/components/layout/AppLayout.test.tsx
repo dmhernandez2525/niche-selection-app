@@ -21,7 +21,9 @@ describe('AppLayout', () => {
       </AppLayout>
     );
 
-    expect(screen.getByText('Niche Scout')).toBeInTheDocument();
+    // Use getAllByText since there are two instances (sidebar and mobile header)
+    const titles = screen.getAllByText('Niche Scout');
+    expect(titles.length).toBeGreaterThanOrEqual(1);
   });
 
   it('renders navigation links', () => {
@@ -32,7 +34,7 @@ describe('AppLayout', () => {
     );
 
     expect(screen.getByText('Dashboard')).toBeInTheDocument();
-    expect(screen.getByText('Saved Niches')).toBeInTheDocument();
+    expect(screen.getByText('Saved Searches')).toBeInTheDocument();
     expect(screen.getByText('Settings')).toBeInTheDocument();
   });
 
@@ -44,12 +46,13 @@ describe('AppLayout', () => {
     );
 
     const dashboardLink = screen.getByText('Dashboard');
-    const savedNichesLink = screen.getByText('Saved Niches');
+    const savedSearchesLink = screen.getByText('Saved Searches');
     const settingsLink = screen.getByText('Settings');
 
-    expect(dashboardLink.tagName).toBe('A');
-    expect(savedNichesLink.tagName).toBe('A');
-    expect(settingsLink.tagName).toBe('A');
+    // Links are wrapped in anchor tags
+    expect(dashboardLink.closest('a')).toBeInTheDocument();
+    expect(savedSearchesLink.closest('a')).toBeInTheDocument();
+    expect(settingsLink.closest('a')).toBeInTheDocument();
   });
 
   it('has the correct layout structure', () => {
@@ -86,7 +89,6 @@ describe('AppLayout', () => {
     const main = container.querySelector('main');
     expect(main).toBeInTheDocument();
     expect(main).toHaveClass('flex-1');
-    expect(main).toHaveClass('p-8');
   });
 
   it('applies correct background classes', () => {
@@ -101,7 +103,7 @@ describe('AppLayout', () => {
     expect(mainContainer).toHaveClass('text-foreground');
   });
 
-  it('sidebar has hidden class for mobile', () => {
+  it('sidebar uses transform for mobile visibility', () => {
     const { container } = render(
       <AppLayout>
         <div>Content</div>
@@ -109,8 +111,9 @@ describe('AppLayout', () => {
     );
 
     const aside = container.querySelector('aside');
-    expect(aside).toHaveClass('hidden');
-    expect(aside).toHaveClass('md:block');
+    // New sidebar uses transform-based visibility with -translate-x-full for hidden state
+    expect(aside).toHaveClass('-translate-x-full');
+    expect(aside).toHaveClass('md:translate-x-0');
   });
 
   it('sidebar has fixed width', () => {
@@ -134,5 +137,16 @@ describe('AppLayout', () => {
 
     expect(screen.getByTestId('child-1')).toBeInTheDocument();
     expect(screen.getByTestId('child-2')).toBeInTheDocument();
+  });
+
+  it('renders mobile header with menu button', () => {
+    render(
+      <AppLayout>
+        <div>Content</div>
+      </AppLayout>
+    );
+
+    const menuButton = screen.getByRole('button', { name: /open menu/i });
+    expect(menuButton).toBeInTheDocument();
   });
 });

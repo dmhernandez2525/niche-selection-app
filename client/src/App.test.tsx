@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from './test/test-utils';
+import { render, screen } from '@testing-library/react';
 import App from './App';
 
 // Mock fetch for the initial query
@@ -11,21 +11,32 @@ vi.stubGlobal('fetch', vi.fn(() =>
 ));
 
 describe('App', () => {
-  it('renders the Niche Finder heading', async () => {
+  it('renders the Dashboard heading on root route', async () => {
     render(<App />);
 
-    expect(screen.getByText('Niche Finder')).toBeInTheDocument();
+    // Dashboard appears in navigation and as page heading, use getAllByText
+    const dashboardElements = screen.getAllByText('Dashboard');
+    expect(dashboardElements.length).toBeGreaterThanOrEqual(1);
   });
 
-  it('renders the search input', () => {
+  it('renders navigation with Niche Scout branding', () => {
     render(<App />);
 
-    expect(screen.getByPlaceholderText(/enter a seed keyword/i)).toBeInTheDocument();
+    // Should have Niche Scout in the sidebar/header
+    const titles = screen.getAllByText('Niche Scout');
+    expect(titles.length).toBeGreaterThanOrEqual(1);
   });
 
-  it('renders the analyze button', () => {
+  it('renders navigation links', () => {
     render(<App />);
 
-    expect(screen.getByRole('button', { name: /analyze/i })).toBeInTheDocument();
+    // Use getAllByText for elements that appear multiple times
+    const nicheFinderElements = screen.getAllByText('Niche Finder');
+    const resultsElements = screen.getAllByText('Results');
+    const savedSearchesElements = screen.getAllByText('Saved Searches');
+
+    expect(nicheFinderElements.length).toBeGreaterThanOrEqual(1);
+    expect(resultsElements.length).toBeGreaterThanOrEqual(1);
+    expect(savedSearchesElements.length).toBeGreaterThanOrEqual(1);
   });
 });
