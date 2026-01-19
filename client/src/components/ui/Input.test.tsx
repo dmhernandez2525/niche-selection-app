@@ -25,7 +25,7 @@ describe('Input', () => {
 
   it('supports controlled input', async () => {
     const handleChange = vi.fn();
-    const { user, rerender } = render(
+    const { user } = render(
       <Input value="initial" onChange={handleChange} aria-label="Controlled input" />
     );
 

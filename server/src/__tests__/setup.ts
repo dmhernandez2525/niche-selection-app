@@ -1,24 +1,27 @@
 import { jest, beforeEach, afterEach } from '@jest/globals';
 
-// Mock Prisma client
+// Type for mock functions that can resolve to any value
+type MockFn = jest.Mock<(...args: unknown[]) => unknown>;
+
+// Mock Prisma client with proper typing
 export const mockPrisma = {
   niche: {
-    findMany: jest.fn(),
-    findUnique: jest.fn(),
-    create: jest.fn(),
-    update: jest.fn(),
-    delete: jest.fn(),
+    findMany: jest.fn() as MockFn,
+    findUnique: jest.fn() as MockFn,
+    create: jest.fn() as MockFn,
+    update: jest.fn() as MockFn,
+    delete: jest.fn() as MockFn,
   },
   keyword: {
-    findFirst: jest.fn(),
-    create: jest.fn(),
+    findFirst: jest.fn() as MockFn,
+    create: jest.fn() as MockFn,
   },
   analysis: {
-    findMany: jest.fn(),
-    create: jest.fn(),
+    findMany: jest.fn() as MockFn,
+    create: jest.fn() as MockFn,
   },
-  $connect: jest.fn(),
-  $disconnect: jest.fn(),
+  $connect: jest.fn() as MockFn,
+  $disconnect: jest.fn() as MockFn,
 };
 
 // Mock the db module
@@ -29,11 +32,11 @@ jest.unstable_mockModule('../lib/db.js', () => ({
 
 // Mock the analysis services
 jest.unstable_mockModule('../services/competitionAnalysisService.js', () => ({
-  analyzeCompetition: jest.fn().mockResolvedValue(50),
+  analyzeCompetition: jest.fn(() => Promise.resolve(50)),
 }));
 
 jest.unstable_mockModule('../services/profitabilityAnalysisService.js', () => ({
-  analyzeProfitability: jest.fn().mockResolvedValue(75),
+  analyzeProfitability: jest.fn(() => Promise.resolve(75)),
 }));
 
 // Reset all mocks before each test

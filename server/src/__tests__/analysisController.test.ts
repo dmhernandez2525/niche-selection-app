@@ -1,23 +1,26 @@
 import { describe, it, expect, jest, beforeEach } from '@jest/globals';
 import type { Request, Response } from 'express';
 
+// Type for mock functions
+type MockFn = jest.Mock<(...args: unknown[]) => unknown>;
+
 // Mock the db module before imports
 const mockPrisma = {
   niche: {
-    findUnique: jest.fn(),
+    findUnique: jest.fn() as MockFn,
   },
   keyword: {
-    findFirst: jest.fn(),
-    create: jest.fn(),
+    findFirst: jest.fn() as MockFn,
+    create: jest.fn() as MockFn,
   },
   analysis: {
-    findMany: jest.fn(),
-    create: jest.fn(),
+    findMany: jest.fn() as MockFn,
+    create: jest.fn() as MockFn,
   },
 };
 
-const mockAnalyzeCompetition = jest.fn();
-const mockAnalyzeProfitability = jest.fn();
+const mockAnalyzeCompetition = jest.fn() as MockFn;
+const mockAnalyzeProfitability = jest.fn() as MockFn;
 
 jest.unstable_mockModule('../lib/db.js', () => ({
   default: mockPrisma,

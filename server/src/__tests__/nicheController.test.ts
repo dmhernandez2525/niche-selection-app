@@ -1,14 +1,17 @@
 import { describe, it, expect, jest, beforeEach } from '@jest/globals';
 import type { Request, Response } from 'express';
 
+// Type for mock functions
+type MockFn = jest.Mock<(...args: unknown[]) => unknown>;
+
 // Mock the db module before imports
 const mockPrisma = {
   niche: {
-    findMany: jest.fn(),
-    findUnique: jest.fn(),
-    create: jest.fn(),
-    update: jest.fn(),
-    delete: jest.fn(),
+    findMany: jest.fn() as MockFn,
+    findUnique: jest.fn() as MockFn,
+    create: jest.fn() as MockFn,
+    update: jest.fn() as MockFn,
+    delete: jest.fn() as MockFn,
   },
 };
 
