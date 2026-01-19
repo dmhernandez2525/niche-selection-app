@@ -47,9 +47,9 @@ services:
       - key: CORS_ORIGIN
         sync: false
 
-# Database - PostgreSQL (Basic: ~$7/month)
+# Database - PostgreSQL (Basic 256MB: ~$7/month)
 databases:
   - name: niche-selection-db
-    plan: basic
+    plan: basic-256mb
     databaseName: niche_selection
     user: niche_user
