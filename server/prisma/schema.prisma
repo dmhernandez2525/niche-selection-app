@@ -10,6 +10,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // User's niches
+  niches Niche[]
+
+  @@index([email])
+}
+
 model Niche {
   id          String     @id @default(cuid())
   name        String     @unique
@@ -18,6 +31,12 @@ model Niche {
   updatedAt   DateTime   @updatedAt
   analyses    Analysis[]
   keywords    Keyword[]
+
+  // Optional: Associate niches with users
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
 }
 
 model Keyword {
