@@ -3,6 +3,7 @@ import { render, RenderOptions, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter } from 'react-router-dom';
+import { ToastProvider } from '@/context/ToastContext';
 
 // Create a fresh QueryClient for each test
 function createTestQueryClient() {
@@ -30,7 +31,9 @@ function AllProviders({ children }: AllProvidersProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>{children}</BrowserRouter>
+      <ToastProvider>
+        <BrowserRouter>{children}</BrowserRouter>
+      </ToastProvider>
     </QueryClientProvider>
   );
 }

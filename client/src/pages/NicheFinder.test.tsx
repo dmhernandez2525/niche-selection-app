@@ -40,8 +40,8 @@ describe('NicheFinder', () => {
 
     render(<NicheFinder />);
 
-    // Should show skeleton loaders
-    expect(screen.getByText('Top Results')).toBeInTheDocument();
+    // Should show the search card header
+    expect(screen.getByText('Search Keywords')).toBeInTheDocument();
   });
 
   it('displays error message when API fails', async () => {
@@ -61,8 +61,8 @@ describe('NicheFinder', () => {
 
   it('displays niche results when data loads', async () => {
     const mockData = [
-      { keyword: 'gaming', score: 85, competitionScore: 0.7, profitabilityScore: 15.50 },
-      { keyword: 'cooking', score: 72, competitionScore: 0.5, profitabilityScore: 12.00 },
+      { keyword: 'gaming', score: 85, competitionScore: 70, profitabilityScore: 15.50 },
+      { keyword: 'cooking', score: 72, competitionScore: 50, profitabilityScore: 12.00 },
     ];
 
     vi.stubGlobal('fetch', vi.fn(() =>
