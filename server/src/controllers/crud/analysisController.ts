@@ -1,7 +1,9 @@
 import type { Request, Response } from 'express';
 import prisma from '../../lib/db.js';
-import { analyzeCompetition } from '../../services/competitionAnalysisService.js';
+import { youtubeApiService } from '../../services/youtubeApiService.js';
+import { googleTrendsService } from '../../services/googleTrendsService.js';
 import { analyzeProfitability } from '../../services/profitabilityAnalysisService.js';
+import { isExternalApiError } from '../../utils/apiErrors.js';
 import { z } from 'zod';
 
 const RunAnalysisSchema = z.object({
@@ -56,19 +58,44 @@ export const runAnalysis = async (req: Request, res: Response) => {
       });
     }
 
-    // Run analysis
+    // Run analysis using integrated services
     let competitionScore = 0;
     let channelCount = 0;
     let profitabilityScore = 0;
+    let trendScore = 0;
 
+    // Analyze competition using YouTube API service
     try {
-      competitionScore = await analyzeCompetition(keywordTerm);
-      channelCount = competitionScore; // The service returns channel count as competition score
+      const competitionAnalysis = await youtubeApiService.analyzeCompetition(keywordTerm);
+      competitionScore = competitionAnalysis.competitionScore;
+      channelCount = competitionAnalysis.totalChannels;
     } catch (e) {
-      console.error('Competition analysis failed:', e);
-      competitionScore = 999; // High penalty on error
+      if (isExternalApiError(e)) {
+        console.error('YouTube API error:', e.getLogDetails());
+      } else {
+        console.error('Competition analysis failed:', e);
+      }
+      competitionScore = 50; // Default medium competition on error
     }
 
+    // Get trend data using Google Trends service
+    try {
+      const trendData = await googleTrendsService.getInterestOverTime(keywordTerm);
+      if (trendData.length > 0) {
+        // Calculate average trend score from recent data
+        const recentTrends = trendData.slice(-30); // Last 30 data points
+        trendScore = recentTrends.reduce((sum, t) => sum + t.value, 0) / recentTrends.length;
+      }
+    } catch (e) {
+      if (isExternalApiError(e)) {
+        console.error('Google Trends API error:', e.getLogDetails());
+      } else {
+        console.error('Trend analysis failed:', e);
+      }
+      trendScore = 50; // Default medium trend on error
+    }
+
+    // Analyze profitability (AdSense)
     try {
       profitabilityScore = await analyzeProfitability(keywordTerm);
     } catch (e) {
@@ -76,7 +103,9 @@ export const runAnalysis = async (req: Request, res: Response) => {
       profitabilityScore = 0; // Zero profitability on error
     }
 
-    const overallScore = profitabilityScore - competitionScore;
+    // Calculate overall score incorporating trend data
+    // Higher trend + lower competition = better opportunity
+    const overallScore = (profitabilityScore + trendScore) - competitionScore;
 
     // Save analysis
     const analysis = await prisma.analysis.create({
