@@ -59,7 +59,7 @@ export const createNiche = async (req: Request, res: Response) => {
   try {
     const parsed = CreateNicheSchema.safeParse(req.body);
     if (!parsed.success) {
-      res.status(400).json({ error: 'Invalid input', details: parsed.error.errors });
+      res.status(400).json({ error: 'Invalid input', details: parsed.error.issues });
       return;
     }
 
@@ -84,7 +84,7 @@ export const updateNiche = async (req: Request, res: Response) => {
     const parsed = UpdateNicheSchema.safeParse(req.body);
 
     if (!parsed.success) {
-      res.status(400).json({ error: 'Invalid input', details: parsed.error.errors });
+      res.status(400).json({ error: 'Invalid input', details: parsed.error.issues });
       return;
     }
 
