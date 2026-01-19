@@ -31,7 +31,7 @@ export const getAllNiches = async (_req: Request, res: Response) => {
 
 export const getNicheById = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
     const niche = await prisma.niche.findUnique({
       where: { id },
       include: {
@@ -64,7 +64,10 @@ export const createNiche = async (req: Request, res: Response) => {
     }
 
     const niche = await prisma.niche.create({
-      data: parsed.data,
+      data: {
+        name: parsed.data.name,
+        description: parsed.data.description ?? null,
+      },
     });
 
     res.status(201).json(niche);
@@ -80,7 +83,7 @@ export const createNiche = async (req: Request, res: Response) => {
 
 export const updateNiche = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
     const parsed = UpdateNicheSchema.safeParse(req.body);
 
     if (!parsed.success) {
@@ -88,9 +91,17 @@ export const updateNiche = async (req: Request, res: Response) => {
       return;
     }
 
+    const updateData: { name?: string; description?: string | null } = {};
+    if (parsed.data.name !== undefined) {
+      updateData.name = parsed.data.name;
+    }
+    if (parsed.data.description !== undefined) {
+      updateData.description = parsed.data.description ?? null;
+    }
+
     const niche = await prisma.niche.update({
       where: { id },
-      data: parsed.data,
+      data: updateData,
     });
 
     res.json(niche);
@@ -106,7 +117,7 @@ export const updateNiche = async (req: Request, res: Response) => {
 
 export const deleteNiche = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
 
     await prisma.niche.delete({
       where: { id },

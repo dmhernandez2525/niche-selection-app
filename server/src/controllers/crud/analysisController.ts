@@ -10,7 +10,7 @@ const RunAnalysisSchema = z.object({
 
 export const getAnalysesByNiche = async (req: Request, res: Response) => {
   try {
-    const { nicheId } = req.params;
+    const nicheId = req.params.nicheId as string;
     const analyses = await prisma.analysis.findMany({
       where: { nicheId },
       include: { keyword: true },
@@ -25,7 +25,7 @@ export const getAnalysesByNiche = async (req: Request, res: Response) => {
 
 export const runAnalysis = async (req: Request, res: Response) => {
   try {
-    const { nicheId } = req.params;
+    const nicheId = req.params.nicheId as string;
     const parsed = RunAnalysisSchema.safeParse(req.body);
 
     if (!parsed.success) {
@@ -44,14 +44,14 @@ export const runAnalysis = async (req: Request, res: Response) => {
 
     // Create or find keyword
     let keyword = await prisma.keyword.findFirst({
-      where: { term: keywordTerm, nicheId },
+      where: { term: keywordTerm, nicheId: nicheId },
     });
 
     if (!keyword) {
       keyword = await prisma.keyword.create({
         data: {
           term: keywordTerm,
-          nicheId,
+          nicheId: nicheId,
         },
       });
     }
