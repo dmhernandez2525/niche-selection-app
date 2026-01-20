@@ -6,7 +6,7 @@
 services:
   # Frontend - React/Vite Static Site (FREE)
   - type: web
-    name: niche-selection-client
+    name: niche-selection-site
     runtime: static
     buildCommand: cd client && npm ci && npm run build
     staticPublishPath: client/dist
