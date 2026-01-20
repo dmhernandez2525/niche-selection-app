@@ -24,7 +24,7 @@ services:
 
   # Backend - Express/TypeScript API (FREE)
   - type: web
-    name: niche-selection-server
+    name: niche-selection-api
     runtime: node
     plan: free
     buildCommand: cd server && npm ci && npx prisma generate
