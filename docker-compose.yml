@@ -1,0 +1,30 @@
+name: niche-selection-app
+
+services:
+  server:
+    build: .
+    command: npm run dev:server
+    ports:
+      - "3004:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/client/node_modules
+      - /app/server/node_modules
+    environment:
+      - NODE_ENV=development
+
+  client:
+    build: .
+    command: npm run dev:client
+    ports:
+      - "3014:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/client/node_modules
+      - /app/server/node_modules
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - server
