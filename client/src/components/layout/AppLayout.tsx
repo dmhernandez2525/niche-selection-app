@@ -9,8 +9,12 @@ import {
   Settings,
   Menu,
   X,
-  ChevronRight
+  ChevronRight,
+  Play
 } from 'lucide-react';
+
+// Check if demo mode is enabled
+const isDemoMode = import.meta.env.VITE_DEMO_MODE === 'true';
 
 const navItems = [
   { href: '/', label: 'Dashboard', icon: LayoutDashboard },
@@ -150,29 +154,52 @@ function Sidebar({
   );
 }
 
+function DemoBanner() {
+  if (!isDemoMode) return null;
+
+  return (
+    <div className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground px-4 py-2 text-center text-sm">
+      <div className="flex items-center justify-center gap-2">
+        <Play className="h-4 w-4" />
+        <span className="font-medium">Demo Mode</span>
+        <span className="hidden sm:inline">- Exploring with sample data</span>
+        <span className="mx-2 hidden sm:inline">|</span>
+        <a href="mailto:hello@example.com" className="underline hover:no-underline">
+          Contact us to get started
+        </a>
+      </div>
+    </div>
+  );
+}
+
 export function AppLayout({ children }: { children: ReactNode }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-background text-foreground">
-      {/* Sidebar */}
-      <Sidebar
-        isOpen={isSidebarOpen}
-        onClose={() => setIsSidebarOpen(false)}
-      />
+    <div className="flex flex-col min-h-screen bg-background text-foreground">
+      {/* Demo Banner */}
+      <DemoBanner />
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* Mobile Header */}
-        <MobileHeader
-          onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)}
+      <div className="flex flex-1">
+        {/* Sidebar */}
+        <Sidebar
           isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
         />
 
-        {/* Page Content */}
-        <main className="flex-1 p-4 md:p-8 overflow-x-hidden">
-          {children}
-        </main>
+        {/* Main Content */}
+        <div className="flex-1 flex flex-col min-w-0">
+          {/* Mobile Header */}
+          <MobileHeader
+            onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            isOpen={isSidebarOpen}
+          />
+
+          {/* Page Content */}
+          <main className="flex-1 p-4 md:p-8 overflow-x-hidden">
+            {children}
+          </main>
+        </div>
       </div>
     </div>
   );
