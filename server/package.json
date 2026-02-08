@@ -19,7 +19,7 @@
     "@prisma/client": "^6.9.0",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
-    "dotenv": "^16.6.1",
+    "dotenv": "^17.2.4",
     "express": "^4.22.1",
     "google-trends-api": "^4.9.2",
     "googleapis": "^118.0.0",
