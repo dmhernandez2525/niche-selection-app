@@ -33,9 +33,12 @@ describe('AppLayout', () => {
       </AppLayout>
     );
 
+    // Sidebar nav labels
     expect(screen.getByText('Dashboard')).toBeInTheDocument();
     expect(screen.getByText('Saved Searches')).toBeInTheDocument();
-    expect(screen.getByText('Settings')).toBeInTheDocument();
+    // Settings appears in both sidebar and bottom nav
+    const settingsLinks = screen.getAllByText('Settings');
+    expect(settingsLinks.length).toBeGreaterThanOrEqual(1);
   });
 
   it('renders navigation as links', () => {
@@ -47,12 +50,25 @@ describe('AppLayout', () => {
 
     const dashboardLink = screen.getByText('Dashboard');
     const savedSearchesLink = screen.getByText('Saved Searches');
-    const settingsLink = screen.getByText('Settings');
+    // Settings appears in both sidebar and bottom nav, use getAllByText
+    const settingsLinks = screen.getAllByText('Settings');
 
     // Links are wrapped in anchor tags
     expect(dashboardLink.closest('a')).toBeInTheDocument();
     expect(savedSearchesLink.closest('a')).toBeInTheDocument();
-    expect(settingsLink.closest('a')).toBeInTheDocument();
+    expect(settingsLinks[0].closest('a')).toBeInTheDocument();
+  });
+
+  it('renders bottom navigation for mobile', () => {
+    const { container } = render(
+      <AppLayout>
+        <div>Content</div>
+      </AppLayout>
+    );
+
+    const bottomNav = container.querySelector('nav[aria-label="Bottom navigation"]');
+    expect(bottomNav).toBeInTheDocument();
+    expect(bottomNav).toHaveClass('md:hidden');
   });
 
   it('has the correct layout structure', () => {

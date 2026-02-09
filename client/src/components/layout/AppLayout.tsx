@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
+import { BottomNav } from './BottomNav';
 import {
   LayoutDashboard,
   Search,
@@ -195,12 +196,15 @@ export function AppLayout({ children }: { children: ReactNode }) {
             isOpen={isSidebarOpen}
           />
 
-          {/* Page Content */}
-          <main className="flex-1 p-4 md:p-8 overflow-x-hidden">
+          {/* Page Content - pb-20 on mobile to clear bottom nav */}
+          <main className="flex-1 p-4 pb-24 md:p-8 md:pb-8 overflow-x-hidden">
             {children}
           </main>
         </div>
       </div>
+
+      {/* Bottom Navigation - mobile only */}
+      <BottomNav />
     </div>
   );
 }

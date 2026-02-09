@@ -32,8 +32,8 @@ function ScoreGauge({ score, label, description }: { score: number; label: strin
 
   return (
     <div className="text-center">
-      <div className="relative inline-flex items-center justify-center w-28 h-28">
-        <svg className="w-28 h-28 transform -rotate-90">
+      <div className="relative inline-flex items-center justify-center w-20 h-20 sm:w-28 sm:h-28">
+        <svg viewBox="0 0 112 112" className="w-full h-full transform -rotate-90">
           <circle
             cx="56"
             cy="56"
@@ -54,10 +54,10 @@ function ScoreGauge({ score, label, description }: { score: number; label: strin
             className={getColor()}
           />
         </svg>
-        <span className={`absolute text-2xl font-bold ${getColor()}`}>{score}</span>
+        <span className={`absolute text-lg sm:text-2xl font-bold ${getColor()}`}>{score}</span>
       </div>
-      <h4 className="font-medium mt-2">{label}</h4>
-      <p className="text-xs text-muted-foreground">{description}</p>
+      <h4 className="font-medium mt-2 text-xs sm:text-sm">{label}</h4>
+      <p className="text-[10px] sm:text-xs text-muted-foreground">{description}</p>
     </div>
   );
 }
@@ -322,26 +322,28 @@ export function AnalysisDetail() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
+      <div className="flex flex-col gap-4">
+        <div className="flex items-start gap-3">
+          <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="shrink-0 mt-0.5">
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-2xl font-bold">{analysis.niche?.name ?? 'Unknown Niche'}</h2>
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <h2 className="text-xl sm:text-2xl font-bold truncate">{analysis.niche?.name ?? 'Unknown Niche'}</h2>
               <Badge variant={analysis.overallScore >= 70 ? 'default' : 'secondary'}>
                 Score: {analysis.overallScore}
               </Badge>
             </div>
-            <p className="text-muted-foreground flex items-center gap-2">
-              <Calendar className="h-4 w-4" />
-              Analyzed on {new Date(analysis.createdAt).toLocaleDateString()}
-              {analysis.keyword && ` • Keyword: ${analysis.keyword.term}`}
+            <p className="text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
+              <span className="flex items-center gap-1">
+                <Calendar className="h-4 w-4 shrink-0" />
+                {new Date(analysis.createdAt).toLocaleDateString()}
+              </span>
+              {analysis.keyword && <span>Keyword: {analysis.keyword.term}</span>}
             </p>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <Button variant="outline" size="sm" onClick={handleSave}>
             <Bookmark className="h-4 w-4 mr-2" />
             Save
@@ -364,7 +366,7 @@ export function AnalysisDetail() {
           <CardDescription>Key metrics for this niche analysis</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-8 grid-cols-1 sm:grid-cols-3 justify-items-center">
+          <div className="grid gap-6 grid-cols-3 justify-items-center">
             <ScoreGauge
               score={analysis.overallScore}
               label="Overall Score"
@@ -472,17 +474,17 @@ export function AnalysisDetail() {
       <Card>
         <CardContent className="p-4">
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground text-center sm:text-left">
               Want to dive deeper into this niche?
             </p>
-            <div className="flex gap-2">
-              <Link to="/niche-finder">
-                <Button variant="outline">
+            <div className="flex gap-2 w-full sm:w-auto">
+              <Link to="/niche-finder" className="flex-1 sm:flex-initial">
+                <Button variant="outline" className="w-full sm:w-auto">
                   Run New Analysis
                 </Button>
               </Link>
-              <Link to="/results">
-                <Button>
+              <Link to="/results" className="flex-1 sm:flex-initial">
+                <Button className="w-full sm:w-auto">
                   View All Results
                 </Button>
               </Link>

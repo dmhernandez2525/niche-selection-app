@@ -136,7 +136,7 @@ export function NicheFinder() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex flex-col space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">Niche Finder</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Niche Finder</h2>
         <p className="text-muted-foreground">
           Discover profitable content niches with AI-powered analysis.
         </p>
