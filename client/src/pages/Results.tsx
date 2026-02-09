@@ -138,13 +138,13 @@ function ScoreDistribution({ analyses }: { analyses: { overallScore: number }[] 
   }, [analyses]);
 
   return (
-    <div className="flex items-center gap-6">
+    <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-6">
       <DonutChart segments={distribution} />
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 sm:flex-col sm:gap-2">
         {distribution.map((segment) => (
           <div key={segment.label} className="flex items-center gap-2">
             <div
-              className="w-3 h-3 rounded-full"
+              className="w-3 h-3 rounded-full shrink-0"
               style={{ backgroundColor: segment.color }}
             />
             <span className="text-sm">
@@ -291,7 +291,7 @@ export function Results() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Results Dashboard</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Results Dashboard</h2>
           <p className="text-muted-foreground">
             Comprehensive analysis results and insights from your niche research.
           </p>
@@ -471,8 +471,8 @@ export function Results() {
                   className="pl-9 w-full sm:w-[200px]"
                 />
               </div>
-              <div className="flex items-center gap-1 bg-muted rounded-md p-1">
-                <Filter className="h-4 w-4 text-muted-foreground ml-2" />
+              <div className="flex items-center gap-1 bg-muted rounded-md p-1 overflow-x-auto">
+                <Filter className="h-4 w-4 text-muted-foreground ml-2 shrink-0" />
                 <SortButton
                   field="score"
                   label="Score"

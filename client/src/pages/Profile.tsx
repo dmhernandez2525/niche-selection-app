@@ -152,7 +152,7 @@ export function Profile() {
     <div className="space-y-6 max-w-3xl mx-auto">
       {/* Header */}
       <div>
-        <h2 className="text-3xl font-bold tracking-tight">Profile & Settings</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Profile & Settings</h2>
         <p className="text-muted-foreground">
           Manage your account settings and preferences.
         </p>
@@ -364,7 +364,7 @@ export function Profile() {
       </Card>
 
       {/* Save Button */}
-      <div className="flex justify-end pb-6">
+      <div className="flex justify-end pb-2 sm:pb-6">
         <Button onClick={handleSave} disabled={isSaving}>
           {isSaving ? (
             <>Saving...</>

@@ -70,8 +70,8 @@ function SearchCard({
         </div>
         <div
           className={`flex items-center gap-1 transition-opacity ${
-            showActions ? 'opacity-100' : 'opacity-0'
-          }`}
+            showActions ? 'opacity-100' : 'opacity-0 sm:opacity-0'
+          } max-sm:opacity-100`}
         >
           <Button variant="ghost" size="icon-sm" onClick={onEdit} title="Edit">
             <Edit2 className="h-4 w-4" />
@@ -242,17 +242,17 @@ export function SavedSearches() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Saved Searches</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Saved Searches</h2>
           <p className="text-muted-foreground">
             Organize and manage your bookmarked niches and keywords.
           </p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={handleExportAll}>
+        <div className="flex gap-2 w-full sm:w-auto">
+          <Button variant="outline" onClick={handleExportAll} className="flex-1 sm:flex-initial">
             <Download className="h-4 w-4 mr-2" />
             Export
           </Button>
-          <Button onClick={() => setShowAddModal(true)}>
+          <Button onClick={() => setShowAddModal(true)} className="flex-1 sm:flex-initial">
             <Plus className="h-4 w-4 mr-2" />
             Add Search
           </Button>

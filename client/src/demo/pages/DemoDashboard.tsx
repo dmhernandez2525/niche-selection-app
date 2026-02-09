@@ -82,9 +82,9 @@ export function DemoDashboard() {
     <div className="space-y-6">
       {/* Demo Banner */}
       <Card className="bg-gradient-to-r from-primary/10 via-primary/5 to-transparent border-primary/20">
-        <CardContent className="flex items-center justify-between p-4">
+        <CardContent className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-full bg-primary/20">
+            <div className="p-2 rounded-full bg-primary/20 shrink-0">
               <Play className="h-5 w-5 text-primary" />
             </div>
             <div>
@@ -94,7 +94,7 @@ export function DemoDashboard() {
               </p>
             </div>
           </div>
-          <Link to="/">
+          <Link to="/" className="self-end sm:self-auto">
             <Button variant="outline" size="sm">Exit Demo</Button>
           </Link>
         </CardContent>
@@ -103,7 +103,7 @@ export function DemoDashboard() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Dashboard</h2>
           <p className="text-muted-foreground">
             Welcome! Here's an overview of your niche research.
           </p>
