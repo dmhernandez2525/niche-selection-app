@@ -1,0 +1,32 @@
+version: 0.2
+
+env:
+  variables:
+    AWS_REGION: us-east-1
+    AWS_ACCOUNT_ID: "157305260149"
+    ECR_REPO: production/niche-selection-api
+    ECS_CLUSTER: production-platform
+    ECS_SERVICE: niche-selection-api
+    IMAGE_TAG: latest
+
+phases:
+  pre_build:
+    commands:
+      - echo "Logging in to Amazon ECR..."
+      - aws ecr get-login-password --region "$AWS_REGION" | docker login --username AWS --password-stdin "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com"
+      - REPO_URI="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPO"
+      - COMMIT_TAG="build-$(date +%Y%m%d%H%M%S)"
+      - echo "Image will be pushed as $REPO_URI:$IMAGE_TAG and $REPO_URI:$COMMIT_TAG"
+
+  build:
+    commands:
+      - echo "Building Docker image..."
+      - docker build -t "$REPO_URI:$IMAGE_TAG" -t "$REPO_URI:$COMMIT_TAG" .
+
+  post_build:
+    commands:
+      - echo "Pushing image to ECR..."
+      - docker push "$REPO_URI:$IMAGE_TAG"
+      - docker push "$REPO_URI:$COMMIT_TAG"
+      - echo "Forcing ECS service redeploy..."
+      - aws ecs update-service --cluster "$ECS_CLUSTER" --service "$ECS_SERVICE" --force-new-deployment --region "$AWS_REGION" --output text --query 'service.serviceArn'
