@@ -20,7 +20,7 @@
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
-    "express": "^4.22.1",
+    "express": "^5.2.1",
     "google-trends-api": "^4.9.2",
     "googleapis": "^118.0.0",
     "helmet": "^8.1.0",
